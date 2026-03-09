@@ -97,6 +97,7 @@ Navigate through increasingly difficult mining operations, beat target scores, m
 ---
 
 ## File Structure
+```
 Scopae Minarum/
 ├── build/
 │   └── scopae_minarum.exe      # Compiled game
@@ -117,7 +118,7 @@ Scopae Minarum/
 ├── build.bat                   # Build script (Windows + GCC)
 ├── save.dat                    # Save file (auto-generated)
 └── README.md                   # This file
-
+```
 ## 🛠️ Building
 
 ### Requirements
@@ -135,6 +136,7 @@ Scopae Minarum/
 
 ### Game Flow
 
+```
 MAIN MENU
     │
     ├──► PLAY ──────► CATITO (Tutorial)
@@ -166,3 +168,4 @@ MAIN MENU
     │              Game Over / Menu
     │
     └──► STATS ──────► View Statistics
+```
