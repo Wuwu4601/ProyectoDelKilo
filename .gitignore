@@ -1,0 +1,4 @@
+.clangd
+.clang-format
+
+Scopae_Minarum/build/*

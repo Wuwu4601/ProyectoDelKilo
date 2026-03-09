@@ -4,10 +4,10 @@
 #include "raylib.h"
 
 typedef struct {
-    Rectangle rect;
-    const char* text;
-    int hovered;
-    int pressed;
+  Rectangle rect;
+  const char *text;
+  bool hovered;
+  bool pressed;
 } Button;
 
 Button createButton(int x, int y, int width, int height, const char* text);
@@ -18,7 +18,7 @@ void initMenu();
 void updateMenu();
 void drawMenu();
 void updateStats();
-void drawStats();
-void startNewGame(); 
+Button createButton(int x, int y, int width, int height, const char *text);
+int checkButtonPress(Button *btn);
 
 #endif
