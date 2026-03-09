@@ -1,7 +1,6 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include <stdbool.h>
 #include "raylib.h"
 
 typedef enum {
@@ -31,8 +30,8 @@ extern int baseScore;
 extern int mult;
 extern int minesLeft;
 extern float gameTime;
-extern bool gameOver;
-extern bool gameWon;
+extern int gameOver;
+extern int gameWon;
 extern int currentLives;
 extern int maxLives;
 extern RoundType roundType;
@@ -44,22 +43,21 @@ extern int totalTilesRevealed;
 extern int runsCompleted;
 extern int bestCalicata;
 extern int roundNumber;
-extern bool firstClick;
+extern int firstClick;
 extern int currentGridW;
 extern int currentGridH;
 extern int currentMines;
-extern bool sondeoBeaten;
-extern bool cataBeaten;
-extern bool calicataBeaten;
+extern int sondeoBeaten;
+extern int cataBeaten;
+extern int calicataBeaten;
 
-// Variables para End of Round
 extern int timeBonus;
 extern int totalScore;
 extern int roundMoney;
-extern bool roundCompleted;
+extern int roundCompleted;
 extern float timeSaved;
 extern int parTimeMultiplier;
-extern int currentParTime;  // ✅ Para mostrar el cálculo completo
+extern int currentParTime;
 
 void initGame();
 void updateGame();
@@ -74,6 +72,6 @@ void goToSondeo();
 void goToCata();
 void goToNextAvailable();
 int getParTime();
-int countSafeRevealed();  // ✅ Nueva función
+int countSafeRevealed();
 
 #endif

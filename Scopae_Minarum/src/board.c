@@ -5,34 +5,35 @@
 #include <stdlib.h>
 #include <time.h>
 
-int board[GRID_H_MAX][GRID_W_MAX];
-bool revealed[GRID_H_MAX][GRID_W_MAX];
-bool flagged[GRID_H_MAX][GRID_W_MAX];
-bool minesPlaced = false;
+int board[16][16];
+int revealed[16][16];
+int flagged[16][16];
+int minesPlaced = 0;
 
-// ✅ Limpiar TODO el tablero (no solo hasta currentGridW/H)
 void clearBoard()
 {
-    for (int y = 0; y < GRID_H_MAX; y++) {
-        for (int x = 0; x < GRID_W_MAX; x++) {
+    int y, x;
+    for (y = 0; y < GRID_H_MAX; y++) {
+        for (x = 0; x < GRID_W_MAX; x++) {
             board[y][x] = 0;
-            revealed[y][x] = false;
-            flagged[y][x] = false;
+            revealed[y][x] = 0;
+            flagged[y][x] = 0;
         }
     }
-    minesPlaced = false;  // ✅ Resetear esto también
+    minesPlaced = 0;
 }
 
 void placeMines()
 {
+    int placed, x, y;
     if (minesPlaced) return;
     
     srand(time(NULL) + currentGridW + currentGridH);
     
-    int placed = 0;
+    placed = 0;
     while (placed < currentMines) {
-        int x = rand() % currentGridW;
-        int y = rand() % currentGridH;
+        x = rand() % currentGridW;
+        y = rand() % currentGridH;
         
         if (board[y][x] != -1) {
             board[y][x] = -1;
@@ -41,25 +42,23 @@ void placeMines()
     }
     
     generateNumbers();
-    minesPlaced = true;
+    minesPlaced = 1;
 }
 
-// ✅ Safe first click - Asegurar que el primer click nunca tenga mina
 void placeMinesAfterClick(int safeX, int safeY)
 {
+    int placed, x, y, dx, dy;
     if (minesPlaced) return;
     
-    // ✅ Usar semilla diferente para cada ronda
     srand(time(NULL) + safeX + safeY + roundNumber);
     
-    int placed = 0;
+    placed = 0;
     while (placed < currentMines) {
-        int x = rand() % currentGridW;
-        int y = rand() % currentGridH;
+        x = rand() % currentGridW;
+        y = rand() % currentGridH;
         
-        // ✅ No poner mina en el primer click ni sus vecinos (área 3x3)
-        int dx = x - safeX;
-        int dy = y - safeY;
+        dx = x - safeX;
+        dy = y - safeY;
         if (dx >= -1 && dx <= 1 && dy >= -1 && dy <= 1) {
             continue;
         }
@@ -71,20 +70,21 @@ void placeMinesAfterClick(int safeX, int safeY)
     }
     
     generateNumbers();
-    minesPlaced = true;
+    minesPlaced = 1;
 }
 
 void generateNumbers()
 {
-    for (int y = 0; y < currentGridH; y++) {
-        for (int x = 0; x < currentGridW; x++) {
+    int y, x, dy, dx, count, nx, ny;
+    for (y = 0; y < currentGridH; y++) {
+        for (x = 0; x < currentGridW; x++) {
             if (board[y][x] == -1) continue;
             
-            int count = 0;
-            for (int dy = -1; dy <= 1; dy++) {
-                for (int dx = -1; dx <= 1; dx++) {
-                    int nx = x + dx;
-                    int ny = y + dy;
+            count = 0;
+            for (dy = -1; dy <= 1; dy++) {
+                for (dx = -1; dx <= 1; dx++) {
+                    nx = x + dx;
+                    ny = y + dy;
                     
                     if (nx >= 0 && nx < currentGridW && ny >= 0 && ny < currentGridH) {
                         if (board[ny][nx] == -1) {
@@ -100,15 +100,15 @@ void generateNumbers()
 
 void revealTile(int x, int y)
 {
+    int dy, dx;
     if (x < 0 || y < 0 || x >= currentGridW || y >= currentGridH) return;
     if (revealed[y][x] || flagged[y][x]) return;
     
-    // ✅ Safe first click
     if (!minesPlaced) {
         placeMinesAfterClick(x, y);
     }
     
-    revealed[y][x] = true;
+    revealed[y][x] = 1;
     totalTilesRevealed++;
     save.totalTilesRevealed = totalTilesRevealed;
     
@@ -125,8 +125,8 @@ void revealTile(int x, int y)
     }
     
     if (board[y][x] == 0) {
-        for (int dy = -1; dy <= 1; dy++) {
-            for (int dx = -1; dx <= 1; dx++) {
+        for (dy = -1; dy <= 1; dy++) {
+            for (dx = -1; dx <= 1; dx++) {
                 if (dx != 0 || dy != 0) {
                     revealTile(x + dx, y + dy);
                 }
@@ -142,18 +142,19 @@ void toggleFlag(int x, int y)
     
     flagged[y][x] = !flagged[y][x];
     
-    // ✅ Cambiar minesLeft SIEMPRE (sin verificar si hay mina)
     if (flagged[y][x]) {
-        minesLeft--;  // ✅ Bandera puesta - resta 1
+        minesLeft--;
     } else {
-        minesLeft++;  // ✅ Bandera quitada - suma 1
+        minesLeft++;
     }
 }
+
 int countRevealed()
 {
-    int count = 0;
-    for (int y = 0; y < currentGridH; y++) {
-        for (int x = 0; x < currentGridW; x++) {
+    int count, y, x;
+    count = 0;
+    for (y = 0; y < currentGridH; y++) {
+        for (x = 0; x < currentGridW; x++) {
             if (revealed[y][x]) count++;
         }
     }

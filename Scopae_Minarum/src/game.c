@@ -11,8 +11,8 @@ int baseScore = 0;
 int mult = 1;
 int minesLeft = MINES_CATITO;
 float gameTime = 0;
-bool gameOver = false;
-bool gameWon = false;
+int gameOver = 0;
+int gameWon = 0;
 int currentLives = START_LIVES;
 int maxLives = START_LIVES;
 RoundType roundType = ROUND_CATITO;
@@ -24,23 +24,21 @@ int totalTilesRevealed = 0;
 int runsCompleted = 0;
 int bestCalicata = 0;
 int roundNumber = 1;
-bool firstClick = true;
-bool sondeoBeaten = false;
-bool cataBeaten = false;
-bool calicataBeaten = false;
-
-// Variables para End of Round
-int timeBonus = 0;
-int totalScore = 0;
-int roundMoney = 0;
-bool roundCompleted = false;
-float timeSaved = 0;
-int parTimeMultiplier = 1;
-int currentParTime = 0;
-
+int firstClick = 1;
 int currentGridW = GRID_W_CATITO;
 int currentGridH = GRID_H_CATITO;
 int currentMines = MINES_CATITO;
+int sondeoBeaten = 0;
+int cataBeaten = 0;
+int calicataBeaten = 0;
+
+int timeBonus = 0;
+int totalScore = 0;
+int roundMoney = 0;
+int roundCompleted = 0;
+float timeSaved = 0;
+int parTimeMultiplier = 1;
+int currentParTime = 0;
 
 int getParTime()
 {
@@ -56,8 +54,9 @@ int getParTime()
 int countSafeRevealed()
 {
     int count = 0;
-    for (int y = 0; y < currentGridH; y++) {
-        for (int x = 0; x < currentGridW; x++) {
+    int y, x;
+    for (y = 0; y < currentGridH; y++) {
+        for (x = 0; x < currentGridW; x++) {
             if (revealed[y][x] && board[y][x] != -1) {
                 count++;
             }
@@ -101,8 +100,8 @@ void initGame()
     
     minesLeft = currentMines;
     gameTime = 0;
-    gameOver = false;
-    gameWon = false;
+    gameOver = 0;
+    gameWon = 0;
     baseScore = 0;
     score = 0;
     mult = 1;
@@ -110,12 +109,12 @@ void initGame()
     
     totalMinesFound = 0;
     totalTilesRevealed = 0;
-    firstClick = true;
+    firstClick = 1;
     
     timeBonus = 0;
     totalScore = 0;
     roundMoney = 0;
-    roundCompleted = false;
+    roundCompleted = 0;
     timeSaved = 0;
 }
 
@@ -136,16 +135,35 @@ void addScore(int points)
 
 void loseLife()
 {
+    int newBestCalicata;
+    
     currentLives--;
     
     if (currentLives <= 0) {
-        gameOver = true;
+        gameOver = 1;
         
+     
         if (calicataLevel > bestCalicata) {
             bestCalicata = calicataLevel;
         }
+        
+     
+        calicataLevel = 1;
+        money = 0;
+        sondeoBeaten = 0;
+        cataBeaten = 0;
+        calicataBeaten = 0;
+        roundNumber = 1;
+        score = 0;
+        baseScore = 0;
+        totalScore = 0;
+        runsCompleted = 0;
+        
+       
         save.bestCalicata = bestCalicata;
-        saveGame();
+        save.totalMoney = money;           
+        save.runsCompleted = 0;
+        saveGame();                        
         
         gameState = STATE_GAMEOVER;
     }
@@ -153,29 +171,32 @@ void loseLife()
 
 void checkWinCondition()
 {
-    int safeRevealed = countSafeRevealed();
-    int totalSafe = (currentGridW * currentGridH) - currentMines;
-    bool boardCompleted = (safeRevealed >= totalSafe);
+    int safeRevealed, totalSafe, boardCompleted, targetReached;
+    int parTime;
     
-    bool targetReached = (score >= targetScore);
+    safeRevealed = countSafeRevealed();
+    totalSafe = (currentGridW * currentGridH) - currentMines;
+    boardCompleted = (safeRevealed >= totalSafe);
+    
+    targetReached = (score >= targetScore);
     
     if ((boardCompleted || targetReached) && !gameOver && !gameWon) {
-        gameWon = true;
-        gameOver = true;
+        gameWon = 1;
+        gameOver = 1;
         
-        if (roundType == ROUND_SONDEO) sondeoBeaten = true;
-        if (roundType == ROUND_CATA) cataBeaten = true;
+        if (roundType == ROUND_SONDEO) sondeoBeaten = 1;
+        if (roundType == ROUND_CATA) cataBeaten = 1;
         if (roundType == ROUND_CALICATA) {
-            calicataBeaten = true;
+            calicataBeaten = 1;
             calicataLevel++;
             if (calicataLevel > 10) {
                 calicataLevel = 10;
             }
-            sondeoBeaten = false;
-            cataBeaten = false;
+            sondeoBeaten = 0;
+            cataBeaten = 0;
         }
         
-        int parTime = getParTime();
+        parTime = getParTime();
         currentParTime = parTime;
         
         if (gameTime < parTime) {
@@ -187,7 +208,7 @@ void checkWinCondition()
         }
         
         totalScore = score + timeBonus;
-        roundMoney = getRoundReward(roundType);
+        roundMoney = getRoundReward(roundType); 
         roundCompleted = (totalScore >= targetScore);
         
         runsCompleted++;
@@ -247,7 +268,7 @@ void goToNextAvailable()
         currentLives = maxLives;
         gameState = STATE_PLAYING;
     } else {
-        calicataBeaten = false;
+        calicataBeaten = 0;
         roundType = ROUND_SONDEO;
         roundNumber++;
         initGame();
@@ -281,10 +302,10 @@ Color getRoundTypeColor(RoundType type)
 int getRoundReward(RoundType type)
 {
     switch (type) {
-        case ROUND_CATITO: return 50;
-        case ROUND_SONDEO: return 100;
-        case ROUND_CATA: return 250;
-        case ROUND_CALICATA: return 500;
-        default: return 100;
+        case ROUND_CATITO: return 3;    
+        case ROUND_SONDEO: return 3;  
+        case ROUND_CATA: return 4;    
+        case ROUND_CALICATA: return 5;  
+        default: return 0;
     }
 }

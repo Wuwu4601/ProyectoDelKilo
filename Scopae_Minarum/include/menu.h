@@ -10,10 +10,13 @@ typedef struct {
   bool pressed;
 } Button;
 
+Button createButton(int x, int y, int width, int height, const char* text);
+int checkButtonPress(Button* btn);
+void drawButton(Button* btn, Color normalColor, Color hoverColor);
+
 void initMenu();
 void updateMenu();
 void drawMenu();
-void drawStats();
 void updateStats();
 Button createButton(int x, int y, int width, int height, const char *text);
 int checkButtonPress(Button *btn);
