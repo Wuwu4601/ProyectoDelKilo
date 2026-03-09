@@ -1,5 +1,5 @@
 #include "../include/save.h"
-#include "../include/game.h"  /* ✅ Agregar esto para acceder a las variables globales */
+#include "../include/game.h" 
 #include <stdio.h>
 
 SaveData save;
@@ -12,7 +12,7 @@ void loadGame()
         fread(&save, sizeof(SaveData), 1, f);
         fclose(f);
         
-        /* ✅ Ahora estas variables son accesibles */
+     
         money = save.totalMoney;
         bestCalicata = save.bestCalicata;
         runsCompleted = save.runsCompleted;
