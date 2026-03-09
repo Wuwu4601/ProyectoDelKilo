@@ -8,47 +8,49 @@
 
 int main()
 {
+    int sidebarX, currentTileSize, boardPixelWidth, boardPixelHeight, offsetX, offsetY;
+    int menuBtnWidth, menuBtnHeight, menuBtnX, menuBtnY;
+    int resumeBtnWidth, resumeBtnHeight, resumeBtnX, resumeBtnY;
+    int menuTextWidth, resumeTextWidth;
+    int optionsOpen;
+    
     SetExitKey(0);
     
-    loadSave();
+    loadGame();
     initMenu();
     
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Scopae Minarum");
     SetTargetFPS(60);
     
-    int sidebarX = SCREEN_WIDTH - SIDEBAR_WIDTH - SIDEBAR_MARGIN;
+    sidebarX = SCREEN_WIDTH - SIDEBAR_WIDTH - SIDEBAR_MARGIN;
     
-    // ✅ TILE_SIZE dinámico según la ronda
-    int currentTileSize = TILE_SIZE;
+    currentTileSize = TILE_SIZE;
     if (roundType == ROUND_CATITO) {
         currentTileSize = TILE_SIZE_CATITO;
     }
     
-    int boardPixelWidth = currentGridW * currentTileSize;
-    int boardPixelHeight = currentGridH * currentTileSize;
-    int offsetX = (sidebarX - boardPixelWidth) / 2;
-    int offsetY = 50;
+    boardPixelWidth = currentGridW * currentTileSize;
+    boardPixelHeight = currentGridH * currentTileSize;
+    offsetX = (sidebarX - boardPixelWidth) / 2;
+    offsetY = 50;
     
-    int menuBtnWidth = 200;
-    int menuBtnHeight = 50;
-    int menuBtnX = sidebarX/2 - menuBtnWidth/2;
-    int menuBtnY = SCREEN_HEIGHT/2 + 100;
+    menuBtnWidth = 200;
+    menuBtnHeight = 50;
+    menuBtnX = sidebarX/2 - menuBtnWidth/2;
+    menuBtnY = SCREEN_HEIGHT/2 + 100;
     
-    int resumeBtnWidth = 200;
-    int resumeBtnHeight = 50;
-    int resumeBtnX = sidebarX/2 - resumeBtnWidth/2;
-    int resumeBtnY = SCREEN_HEIGHT/2 + 100;
+    resumeBtnWidth = 200;
+    resumeBtnHeight = 50;
+    resumeBtnX = sidebarX/2 - resumeBtnWidth/2;
+    resumeBtnY = SCREEN_HEIGHT/2 + 100;
     
-    // ✅ menuTextWidth declarado AQUÍ (al inicio, para que funcione en todos los case)
-    int menuTextWidth = 0;
-    
-    bool optionsOpen = false;
+    menuTextWidth = 0;
+    optionsOpen = 0;
     
     while (!WindowShouldClose()) {
         BeginDrawing();
         ClearBackground((Color){15, 15, 20, 255});
         
-        // ✅ Recalcular posición del tablero en cada frame
         currentTileSize = TILE_SIZE;
         if (roundType == ROUND_CATITO) {
             currentTileSize = TILE_SIZE_CATITO;
@@ -69,43 +71,39 @@ int main()
                 drawStats();
             } break;
             
-case STATE_CATA_SELECT: {
-    drawCataSelector();
-    
-    if (checkCataSelectPress()) {
-        goToNextAvailable();
-    }
-    
-    // ✅ Skip Sondeo - Marca como completado pero NO va directo a Cata
-    if (checkSkipSondeoPress()) {
-        sondeoBeaten = true;
-        // ✅ NO llamar goToCata() - se queda en el Cata Selector
-        // El jugador ahora puede elegir Cata o skippear Cata también
-    }
-    
-    // ✅ Skip Cata - Solo disponible si Sondeo está completado/skippeado
-    if (checkSkipCataPress()) {
-        cataBeaten = true;
-        roundType = ROUND_CALICATA;
-        roundNumber++;
-        initGame();
-        currentLives = maxLives;
-        gameState = STATE_PLAYING;
-    }
-    
-    if (IsKeyPressed(KEY_C)) {
-        goToNextAvailable();
-    }
-    if (IsKeyPressed(KEY_S) && sondeoBeaten && !cataBeaten) {
-        cataBeaten = true;
-        roundType = ROUND_CALICATA;
-        roundNumber++;
-        initGame();
-        currentLives = maxLives;
-        gameState = STATE_PLAYING;
-    }
-    
-} break;
+            case STATE_CATA_SELECT: {
+                drawCataSelector();
+                
+                if (checkCataSelectPress()) {
+                    goToNextAvailable();
+                }
+                
+                if (checkSkipSondeoPress()) {
+                    sondeoBeaten = 1; 
+                }
+                
+                if (checkSkipCataPress()) {
+                    cataBeaten = 1; 
+                    roundType = ROUND_CALICATA;
+                    roundNumber++;
+                    initGame();
+                    currentLives = maxLives;
+                    gameState = STATE_PLAYING;
+                }
+                
+                if (IsKeyPressed(KEY_C)) {
+                    goToNextAvailable();
+                }
+                if (IsKeyPressed(KEY_S) && sondeoBeaten && !cataBeaten) {
+                    cataBeaten = 1; 
+                    roundType = ROUND_CALICATA;
+                    roundNumber++;
+                    initGame();
+                    currentLives = maxLives;
+                    gameState = STATE_PLAYING;
+                }
+                
+            } break;
             
             case STATE_PLAYING: {
                 if (IsKeyPressed(KEY_ESCAPE)) { 
@@ -117,12 +115,11 @@ case STATE_CATA_SELECT: {
                 updateGame();
                 
                 if (checkOptionsButtonPress() && !optionsOpen) {
-                    optionsOpen = true;
+                    optionsOpen = 1;  
                     gameState = STATE_OPTIONS;
                     break;
                 }
                 
-                // ✅ Click izquierdo - Revelar
                 if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && !gameOver) {
                     Vector2 m = GetMousePosition();
                     if (m.x >= offsetX && m.x < offsetX + boardPixelWidth &&
@@ -135,19 +132,17 @@ case STATE_CATA_SELECT: {
                     }
                 }
                 
-// ✅ En STATE_PLAYING, busca la sección de click derecho y reemplaza con:
-
-if (IsMouseButtonPressed(MOUSE_RIGHT_BUTTON)) {
-    Vector2 m = GetMousePosition();
-    if (m.x >= offsetX && m.x < offsetX + boardPixelWidth &&
-        m.y >= offsetY && m.y < offsetY + boardPixelHeight) {
-        int x = (int)((m.x - offsetX) / currentTileSize);
-        int y = (int)((m.y - offsetY) / currentTileSize);
-        if (x >= 0 && x < currentGridW && y >= 0 && y < currentGridH) {
-            toggleFlag(x, y);  // ✅ Esto ya está correcto en board.c
-        }
-    }
-}
+                if (IsMouseButtonPressed(MOUSE_RIGHT_BUTTON)) {
+                    Vector2 m = GetMousePosition();
+                    if (m.x >= offsetX && m.x < offsetX + boardPixelWidth &&
+                        m.y >= offsetY && m.y < offsetY + boardPixelHeight) {
+                        int x = (int)((m.x - offsetX) / currentTileSize);
+                        int y = (int)((m.y - offsetY) / currentTileSize);
+                        if (x >= 0 && x < currentGridW && y >= 0 && y < currentGridH) {
+                            toggleFlag(x, y);
+                        }
+                    }
+                }  
                 
                 drawSidebar();
                 drawBottomBar();
@@ -168,7 +163,7 @@ if (IsMouseButtonPressed(MOUSE_RIGHT_BUTTON)) {
                 
                 DrawRectangle(resumeBtnX, resumeBtnY, resumeBtnWidth, resumeBtnHeight, (Color){50, 150, 50, 255});
                 DrawRectangleLines(resumeBtnX, resumeBtnY, resumeBtnWidth, resumeBtnHeight, LIGHTGRAY);
-                int resumeTextWidth = MeasureText("RESUME", 28);
+                resumeTextWidth = MeasureText("RESUME", 28);
                 DrawText("RESUME", resumeBtnX + (resumeBtnWidth - resumeTextWidth) / 2, resumeBtnY + 13, 28, WHITE);
                 
                 if (IsKeyPressed(KEY_ESCAPE)) gameState = STATE_PLAYING;
@@ -212,62 +207,67 @@ if (IsMouseButtonPressed(MOUSE_RIGHT_BUTTON)) {
                 DrawRectangle(menuBtnX, menuBtnY, menuBtnWidth, menuBtnHeight, (Color){50, 50, 60, 255});
                 DrawRectangleLines(menuBtnX, menuBtnY, menuBtnWidth, menuBtnHeight, LIGHTGRAY);
                 
-                // ✅ Usar la variable declarada al inicio
                 menuTextWidth = MeasureText("MENU", 28);
                 DrawText("MENU", menuBtnX + (menuBtnWidth - menuTextWidth) / 2, menuBtnY + 13, 28, WHITE);
                 
                 if (IsKeyPressed(KEY_M)) {
-                    optionsOpen = false;
+                    optionsOpen = 0;  
                     gameState = STATE_MENU;
                 }
                 if (checkMenuButtonPress(menuBtnX, menuBtnY, menuBtnWidth, menuBtnHeight)) {
-                    optionsOpen = false;
+                    optionsOpen = 0;  
                     gameState = STATE_MENU;
                 }
                 
             } break;
-
-case STATE_END_OF_ROUND: {
-    drawSidebar();
-    drawBottomBar();
-    drawBoard(offsetX, offsetY, currentTileSize);
-    drawEndOfRound();
-    
-    // ✅ Click en botón (coordenadas actualizadas)
-    int btnWidth = 250;
-    int btnHeight = 55;
-    int sidebarX = SCREEN_WIDTH - SIDEBAR_WIDTH - SIDEBAR_MARGIN;
-    int gameAreaWidth = sidebarX;
-    int boxWidth = 700;
-    int boxX = (gameAreaWidth - boxWidth) / 2;
-    int boxY = 50;
-    int boxHeight = 600;
-    
-    int btnX = boxX + boxWidth/2 - btnWidth/2;
-    int btnY = boxY + boxHeight - 65;  // ✅ Coordenada corregida
-    
-    Vector2 mouse = GetMousePosition();
-    Rectangle btnRect = {btnX, btnY, btnWidth, btnHeight};
-    
-    if (CheckCollisionPointRec(mouse, btnRect) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-        if (roundCompleted) {
-            money += roundMoney;
-            gameState = STATE_CATA_SELECT;
-        } else {
-            gameState = STATE_GAMEOVER;
-        }
-    }
-    
-    if (IsKeyPressed(KEY_C)) {
-        if (roundCompleted) {
-            money += roundMoney;
-            gameState = STATE_CATA_SELECT;
-        } else {
-            gameState = STATE_GAMEOVER;
-        }
-    }
-    
-} break;
+            
+            case STATE_END_OF_ROUND: {
+                drawSidebar();
+                drawBottomBar();
+                drawBoard(offsetX, offsetY, currentTileSize);
+                drawEndOfRound();
+                
+                int btnWidth, btnHeight, btnX, btnY, gameAreaWidth, boxWidth, boxX, boxY, boxHeight;
+                Vector2 mouse;
+                Rectangle btnRect;
+                
+                btnWidth = 250;
+                btnHeight = 55;
+                gameAreaWidth = sidebarX;
+                boxWidth = 700;
+                boxX = (gameAreaWidth - boxWidth) / 2;
+                boxY = 50;
+                boxHeight = 600;
+                
+                btnX = boxX + boxWidth/2 - btnWidth/2;
+                btnY = boxY + boxHeight - 65;
+                
+                mouse = GetMousePosition();
+                btnRect = (Rectangle){(float)btnX, (float)btnY, (float)btnWidth, (float)btnHeight};
+                
+                if (CheckCollisionPointRec(mouse, btnRect) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+                    if (roundCompleted) {
+                        money += roundMoney;
+                        save.totalMoney = money;
+                        saveGame();
+                        gameState = STATE_CATA_SELECT;
+                    } else {
+                        gameState = STATE_GAMEOVER;
+                    }
+                }
+                
+                if (IsKeyPressed(KEY_C)) {
+                    if (roundCompleted) {
+                        money += roundMoney;
+                        save.totalMoney = money;
+                        saveGame();
+                        gameState = STATE_CATA_SELECT;
+                    } else {
+                        gameState = STATE_GAMEOVER;
+                    }
+                }
+                
+            } break;
             
             case STATE_OPTIONS: {
                 drawSidebar();
@@ -280,26 +280,25 @@ case STATE_END_OF_ROUND: {
                 
                 DrawRectangle(resumeBtnX, resumeBtnY, resumeBtnWidth, resumeBtnHeight, (Color){50, 150, 50, 255});
                 DrawRectangleLines(resumeBtnX, resumeBtnY, resumeBtnWidth, resumeBtnHeight, LIGHTGRAY);
-                int resumeTextWidth = MeasureText("RESUME", 28);
+                resumeTextWidth = MeasureText("RESUME", 28);
                 DrawText("RESUME", resumeBtnX + (resumeBtnWidth - resumeTextWidth) / 2, resumeBtnY + 13, 28, WHITE);
                 
                 DrawRectangle(menuBtnX, menuBtnY + 70, menuBtnWidth, menuBtnHeight, (Color){50, 50, 60, 255});
                 DrawRectangleLines(menuBtnX, menuBtnY + 70, menuBtnWidth, menuBtnHeight, LIGHTGRAY);
                 
-                // ✅ menuTextWidth ya está declarado, solo asignamos el valor
                 menuTextWidth = MeasureText("MENU", 28);
                 DrawText("MENU", menuBtnX + (menuBtnWidth - menuTextWidth) / 2, menuBtnY + 83, 28, WHITE);
                 
                 if (IsKeyPressed(KEY_M)) {
-                    optionsOpen = false;
+                    optionsOpen = 0;  
                     gameState = STATE_MENU;
                 }
                 if (checkResumeButtonPress(resumeBtnX, resumeBtnY, resumeBtnWidth, resumeBtnHeight)) {
-                    optionsOpen = false;
+                    optionsOpen = 0;  
                     gameState = STATE_PLAYING;
                 }
                 if (checkMenuButtonPress(menuBtnX, menuBtnY + 70, menuBtnWidth, menuBtnHeight)) {
-                    optionsOpen = false;
+                    optionsOpen = 0;  
                     gameState = STATE_MENU;
                 }
                 
@@ -315,10 +314,15 @@ case STATE_END_OF_ROUND: {
                 DrawText(TextFormat("FINAL SCORE: %i", score), sidebarX/2 - 120, SCREEN_HEIGHT/2 + 20, 30, GOLD);
                 DrawText("PRESS R TO PLAY AGAIN", sidebarX/2 - 160, SCREEN_HEIGHT/2 + 70, 25, WHITE);
                 
-                if (IsKeyPressed(KEY_R)) { initGame(); gameState = STATE_PLAYING; }
+                if (IsKeyPressed(KEY_R)) {
+                    initGame();
+                    gameState = STATE_PLAYING;
+                }
                 if (IsKeyPressed(KEY_M)) gameState = STATE_MENU;
                 
             } break;
+            
+            default: break;
         }
         
         EndDrawing();

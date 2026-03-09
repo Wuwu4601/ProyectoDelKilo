@@ -36,16 +36,16 @@ void drawFlame(int x, int y, int size, float timer)
     DrawCircle(x, y - size/2, size * 0.4, flameColors[(colorIdx + 2) % 4]);
 }
 
-// ✅ Bomba simple (círculo negro)
+
 void drawMine(int centerX, int centerY, int tileSize)
 {
-    int mineSize = tileSize / 4;  // ✅ Un poco más grande para que se vea bien
+    int mineSize = tileSize / 4;  
     
-    // Círculo central negro
+    
     DrawCircle(centerX, centerY, mineSize, BLACK);
 }
 
-// ✅ Sidebar para gameplay (completo)
+
 void drawSidebar()
 {
     int sidebarX = SCREEN_WIDTH - SIDEBAR_WIDTH - SIDEBAR_MARGIN;
@@ -184,7 +184,7 @@ void drawSidebar()
     DrawText("OPTIONS", optionsTextX, optionsTextY, 26, LIGHTGRAY);
 }
 
-// ✅ Sidebar para Cata Selector (con correcciones estéticas)
+
 void drawCataSelectorSidebar()
 {
     int sidebarX = SCREEN_WIDTH - SIDEBAR_WIDTH - SIDEBAR_MARGIN;
@@ -197,22 +197,22 @@ void drawCataSelectorSidebar()
     int sectionSpacing = 25;
     int itemSpacing = 42;
     
-    // ✅ CURRENT ROUND → "CHOOSE YOUR NEXT CATA" (texto más pequeño)
+  
     DrawText("CURRENT ROUND", xOffset, yOffset, 16, LIGHTGRAY);
     yOffset += 25;
     
     DrawRectangle(xOffset, yOffset, SIDEBAR_WIDTH - 40, 60, (Color){40, 40, 50, 255});
     DrawRectangleLines(xOffset, yOffset, SIDEBAR_WIDTH - 40, 60, (Color){100, 200, 255, 255});
-    DrawText("CHOOSE YOUR NEXT CATA", xOffset + 10, yOffset + 22, 16, WHITE);  // ✅ Texto más pequeño (16 en vez de 20)
+    DrawText("CHOOSE YOUR NEXT CATA", xOffset + 10, yOffset + 22, 16, WHITE); 
     yOffset += 70 + sectionSpacing;
     
-    // ✅ TARGET SCORE - Cuadro vacío (tono rojizo opaco)
-    DrawRectangle(xOffset, yOffset, SIDEBAR_WIDTH - 40, 55, (Color){40, 25, 25, 255});  // ✅ Rojo opaco
-    DrawRectangleLines(xOffset, yOffset, SIDEBAR_WIDTH - 40, 55, (Color){100, 50, 50, 255});  // ✅ Borde rojizo
-    DrawText("TARGET SCORE", xOffset + 5, yOffset + 8, 14, (Color){120, 50, 50, 255});  // ✅ Texto rojizo opaco
+
+    DrawRectangle(xOffset, yOffset, SIDEBAR_WIDTH - 40, 55, (Color){40, 25, 25, 255}); 
+    DrawRectangleLines(xOffset, yOffset, SIDEBAR_WIDTH - 40, 55, (Color){100, 50, 50, 255});  
+    DrawText("TARGET SCORE", xOffset + 5, yOffset + 8, 14, (Color){120, 50, 50, 255}); 
     yOffset += 65 + sectionSpacing;
     
-    // ✅ CURRENT SCORE - Cuadro vacío
+
     DrawText("CURRENT SCORE", xOffset, yOffset, 16, (Color){100, 100, 100, 255});
     yOffset += 25;
     
@@ -220,11 +220,11 @@ void drawCataSelectorSidebar()
     DrawRectangleLines(xOffset, yOffset, SIDEBAR_WIDTH - 40, 130, (Color){100, 100, 100, 255});
     yOffset += 140 + sectionSpacing;
     
-    // ✅ RUN INFO (más alto para que REVEALED quepa)
+  
     DrawText("RUN INFO", xOffset, yOffset, 16, LIGHTGRAY);
     yOffset += 25;
     
-    // ✅ Caja más alta (240 en vez de 200)
+
     DrawRectangle(xOffset, yOffset, SIDEBAR_WIDTH - 40, 240, (Color){35, 35, 45, 255});
     DrawRectangleLines(xOffset, yOffset, SIDEBAR_WIDTH - 40, 240, (Color){60, 60, 70, 255});
     
@@ -254,13 +254,13 @@ void drawCataSelectorSidebar()
     DrawText("ROUND", xOffset + 15, infoY + itemSpacing*3 + 10, 16, LIGHTGRAY);
     DrawText(TextFormat("%i", roundNumber), xOffset + 120, infoY + itemSpacing*3 + 8, 26, SKYBLUE);
     
-    // ✅ REVEALED - Cuadro vacío (dentro de RUN INFO)
+
     DrawRectangle(xOffset + 5, infoY + itemSpacing*4, SIDEBAR_WIDTH - 50, 38, (Color){30, 40, 35, 255});
-    DrawRectangleLines(xOffset + 5, infoY + itemSpacing*4, SIDEBAR_WIDTH - 50, 38, (Color){60, 100, 60, 255});  // ✅ Borde verde opaco
-    DrawText("REVEALED", xOffset + 15, infoY + itemSpacing*4 + 10, 16, (Color){80, 120, 80, 255});  // ✅ Texto verde opaco
-    // ✅ Sin números
+    DrawRectangleLines(xOffset + 5, infoY + itemSpacing*4, SIDEBAR_WIDTH - 50, 38, (Color){60, 100, 60, 255});  
+    DrawText("REVEALED", xOffset + 15, infoY + itemSpacing*4 + 10, 16, (Color){80, 120, 80, 255}); 
+   
     
-    // ✅ No aumentar yOffset aquí - REVEALED es el último item
+   
     
     yOffset += 250 + sectionSpacing;
     
@@ -293,19 +293,19 @@ void drawBottomBar()
     
     int sectionWidth = boardPixelWidth / 2 - 10;
     
-    // ✅ MINES - ROJO (usando minesLeft directamente)
+    
     DrawRectangle(boardStartX + 10, barY + 10, sectionWidth - 20, 50, (Color){40, 25, 25, 255});
     DrawRectangleLines(boardStartX + 10, barY + 10, sectionWidth - 20, 50, RED);
     DrawText("MINES", boardStartX + 40, barY + 20, 20, LIGHTGRAY);
     
-    // ✅ Usar minesLeft directamente (variable global de game.c)
+    
     char minesText[20];
-    sprintf(minesText, "%i", minesLeft);  // ✅ minesLeft, NO actualMines
+    sprintf(minesText, "%i", minesLeft);  
     int minesWidth = MeasureText(minesText, 36);
     int minesX = boardStartX + 50 + (sectionWidth/2 - minesWidth/2);
     DrawText(minesText, minesX, barY + 20, 36, RED);
     
-    // ✅ TIME
+   
     DrawRectangle(boardStartX + sectionWidth + 10, barY + 10, sectionWidth - 20, 50, (Color){30, 40, 35, 255});
     DrawRectangleLines(boardStartX + sectionWidth + 10, barY + 10, sectionWidth - 20, 50, GREEN);
     DrawText("TIME", boardStartX + sectionWidth + 40, barY + 20, 20, LIGHTGRAY);
@@ -346,7 +346,7 @@ void drawBoard(int offsetX, int offsetY, int tileSize)
                 }
                 
                 if (board[y][x] == -1) {
-                    // ✅ Bomba con pinchos
+                    
                     drawMine(sx + tileSize/2, sy + tileSize/2, tileSize);
                 }
             } else {
@@ -367,19 +367,19 @@ void drawBoard(int offsetX, int offsetY, int tileSize)
     }
 }
 
-// ✅ CATA SELECTOR - Centrado perfectamente + Sidebar integrado
+
 void drawCataSelector()
 {
-    // ✅ NO dibujar fondo negro - el sidebar ya está integrado
+    
     drawCataSelectorSidebar();
     
-    // ✅ Centrado perfecto en el área disponible
+    
     int cardWidth = 220;
     int cardHeight = 450;
     int cardSpacing = 40;
     int startY = 120;
     
-    // ✅ Calcular centro del área negra (no del SCREEN_WIDTH)
+    
     int sidebarX = SCREEN_WIDTH - SIDEBAR_WIDTH - SIDEBAR_MARGIN;
     int gameAreaWidth = sidebarX;
     int totalCardsWidth = cardWidth * 3 + cardSpacing * 2;
@@ -390,7 +390,7 @@ void drawCataSelector()
     DrawRectangle(card1X, startY, cardWidth, cardHeight, (Color){30, 40, 60, 255});
     DrawRectangleLines(card1X, startY, cardWidth, cardHeight, (Color){100, 200, 255, 255});
     
-    // ✅ Botón Select/Completed
+   
     if (sondeoBeaten) {
         DrawRectangle(card1X + 20, startY + 20, cardWidth - 40, 45, (Color){80, 80, 80, 255});
         DrawText("Completed", card1X + 55, startY + 28, 24, LIGHTGRAY);
@@ -412,7 +412,7 @@ void drawCataSelector()
     
     DrawText("Reward: $$$", card1X + cardWidth/2 - 50, startY + 280, 22, GOLD);
     
-    // ✅ Skip button (solo si NO completado)
+    
     if (!sondeoBeaten) {
         DrawRectangle(card1X + 20, startY + 360, cardWidth - 40, 55, (Color){200, 50, 50, 255});
         DrawText("Skip", card1X + 85, startY + 375, 24, WHITE);
@@ -423,7 +423,7 @@ int card2X = startX + cardWidth + cardSpacing;
 DrawRectangle(card2X, startY, cardWidth, cardHeight, (Color){40, 35, 25, 255});
 DrawRectangleLines(card2X, startY, cardWidth, cardHeight, (Color){255, 200, 100, 255});
 
-// ✅ Botón Select/Completed/Upcoming
+
 if (sondeoBeaten && !cataBeaten) {
     DrawRectangle(card2X + 20, startY + 20, cardWidth - 40, 45, (Color){255, 150, 50, 255});
     DrawText("Select", card2X + 65, startY + 28, 26, BLACK);
@@ -432,7 +432,7 @@ if (sondeoBeaten && !cataBeaten) {
     DrawText(cataBeaten ? "Completed" : "Upcoming", card2X + 55, startY + 28, 24, LIGHTGRAY);
 }
 
-// ✅ Círculo AMARILLO FIJO (eliminar el Color cataCircleColor)
+
 DrawCircle(card2X + cardWidth/2, startY + 150, 60, (Color){200, 150, 50, 255});
 
 const char* cataText = "CATA";
@@ -446,7 +446,7 @@ DrawText(cataScoreText, card2X + cardWidth/2 - cataScoreWidth/2, startY + 230, 3
 
 DrawText("Reward: $$$$+", card2X + cardWidth/2 - 55, startY + 280, 22, (Color){200, 200, 100, 255});
 
-// ✅ Skip Cata (visible si Sondeo está completado/skippeado)
+
 if (sondeoBeaten && !cataBeaten) {
     DrawRectangle(card2X + 20, startY + 360, cardWidth - 40, 55, (Color){150, 50, 200, 255});
     DrawText("Skip", card2X + 85, startY + 375, 24, WHITE);
@@ -457,7 +457,7 @@ int card3X = startX + (cardWidth + cardSpacing) * 2;
 DrawRectangle(card3X, startY, cardWidth, cardHeight, (Color){45, 25, 25, 255});
 DrawRectangleLines(card3X, startY, cardWidth, cardHeight, (Color){255, 100, 100, 255});
 
-// ✅ Botón Select/Completed/Upcoming
+
 if (sondeoBeaten && cataBeaten && !calicataBeaten) {
     DrawRectangle(card3X + 20, startY + 20, cardWidth - 40, 45, (Color){255, 150, 50, 255});
     DrawText("Select", card3X + 65, startY + 28, 26, BLACK);
@@ -466,7 +466,7 @@ if (sondeoBeaten && cataBeaten && !calicataBeaten) {
     DrawText(calicataBeaten ? "Completed" : "Upcoming", card3X + 55, startY + 28, 24, LIGHTGRAY);
 }
 
-// ✅ Círculo ROJO FIJO (eliminar Color calicataCircleColor)
+
 DrawCircle(card3X + cardWidth/2, startY + 150, 60, (Color){200, 50, 50, 255});
 
 const char* calicataText = "CALICATA";
@@ -480,34 +480,33 @@ DrawText(calicataScoreText, card3X + cardWidth/2 - calicataScoreWidth/2, startY 
 
 DrawText("Reward: $$$$$+", card3X + cardWidth/2 - 60, startY + 280, 22, (Color){200, 150, 150, 255});
 
-// ✅ CALICATA NO TIENE BOTÓN SKIP
+
 }
 
-// ✅ END OF ROUND - Estilo único de Scopae Minarum (CORREGIDO)
+
 void drawEndOfRound()
 {
-    // ✅ Obtener color de la ronda actual
     Color roundColor = getRoundTypeColor(roundType);
     
-    // ✅ Fondo semi-transparente (oscurecer todo el juego)
+   
     DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, (Color){0, 0, 0, 180});
     
-    // ✅ Caja principal (TOP BAR - centrada en el área negra del juego)
-    int boxWidth = 700;  // ✅ Más ancha
-    int boxHeight = 600;  // ✅ Más alta
+
+    int boxWidth = 700; 
+    int boxHeight = 600; 
     int sidebarX = SCREEN_WIDTH - SIDEBAR_WIDTH - SIDEBAR_MARGIN;
     int gameAreaWidth = sidebarX;
-    int boxX = (gameAreaWidth - boxWidth) / 2;  // ✅ Centrado en el área negra
-    int boxY = 50;  // ✅ TOP BAR (50px desde arriba)
+    int boxX = (gameAreaWidth - boxWidth) / 2;  
+    int boxY = 50; 
     
-    // Fondo con gradiente (simulado con rectángulos)
+    
     DrawRectangle(boxX, boxY, boxWidth, boxHeight, (Color){20, 25, 35, 255});
     
-    // Borde del color de la ronda
+   
     DrawRectangleLines(boxX, boxY, boxWidth, boxHeight, roundColor);
     DrawRectangleLines(boxX + 2, boxY + 2, boxWidth - 4, boxHeight - 4, roundColor);
     
-    // ✅ Título con glow del color de la ronda
+    
     DrawText("END OF ROUND", boxX + boxWidth/2 - 140, boxY + 25, 40, roundColor);
     
     int contentX = boxX + 40;
@@ -522,7 +521,7 @@ void drawEndOfRound()
     yOffset += 30;
     
     // Caja de score
-    DrawRectangle(contentX, yOffset, boxWidth - 80, 150, (Color){30, 35, 45, 255});  // ✅ Más alta
+    DrawRectangle(contentX, yOffset, boxWidth - 80, 150, (Color){30, 35, 45, 255}); 
     DrawRectangleLines(contentX, yOffset, boxWidth - 80, 150, (Color){80, 80, 100, 255});
     
     int scoreX = contentX + 20;
@@ -536,7 +535,7 @@ void drawEndOfRound()
     DrawText(baseText, scoreX + boxWidth - 120 - baseWidth, scoreY, 22, GOLD);
     scoreY += 35;
     
-    // ✅ Par Time Bonus - Mostrar cálculo completo
+    // Par Time Bonus - Mostrar cálculo completo
     DrawText("Par Time Bonus:", scoreX, scoreY, 22, LIGHTGRAY);
     char parTimeCalc[50];
     sprintf(parTimeCalc, "(%is - %.1fs) × %.1f = %i", currentParTime, gameTime, (float)parTimeMultiplier, timeBonus);
@@ -640,7 +639,7 @@ void drawEndOfRound()
     int btnWidth = 250;
     int btnHeight = 55;
     int btnX = boxX + boxWidth/2 - btnWidth/2;
-    int btnY = boxY + boxHeight - 65;  // ✅ Más abajo para no cubrir el dinero
+    int btnY = boxY + boxHeight - 65;  
     
     Color btnColor = roundCompleted ? (Color){50, 180, 50, 255} : (Color){180, 50, 50, 255};
     const char* btnText = roundCompleted ? "CONTINUE" : "TRY AGAIN";
@@ -652,135 +651,155 @@ void drawEndOfRound()
     DrawText(btnText, btnX + (btnWidth - btnTextWidth) / 2, btnY + 14, 28, WHITE);
 }
 
-// ✅ Check Select button
-bool checkCataSelectPress()
-{
-    Vector2 mouse = GetMousePosition();
-    
-    int cardWidth = 220;
-    int cardSpacing = 40;
-    int startY = 120;
-    int sidebarX = SCREEN_WIDTH - SIDEBAR_WIDTH - SIDEBAR_MARGIN;
-    int gameAreaWidth = sidebarX;
-    int totalCardsWidth = cardWidth * 3 + cardSpacing * 2;
-    int startX = (gameAreaWidth - totalCardsWidth) / 2;
-    
-    // Determinar qué carta está disponible para Select
-    if (!sondeoBeaten) {
-        Rectangle selectRect = {startX + 20, startY + 20, cardWidth - 40, 45};
-        if (CheckCollisionPointRec(mouse, selectRect) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-            return true;
-        }
-    } else if (!cataBeaten) {
-        int card2X = startX + cardWidth + cardSpacing;
-        Rectangle selectRect = {card2X + 20, startY + 20, cardWidth - 40, 45};
-        if (CheckCollisionPointRec(mouse, selectRect) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-            return true;
-        }
-    } else if (!calicataBeaten) {
-        int card3X = startX + (cardWidth + cardSpacing) * 2;
-        Rectangle selectRect = {card3X + 20, startY + 20, cardWidth - 40, 45};
-        if (CheckCollisionPointRec(mouse, selectRect) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-            return true;
-        }
-    }
-    
-    return false;
-}
 
-// ✅ Check Skip Sondeo button
-bool checkSkipSondeoPress()
-{
-    Vector2 mouse = GetMousePosition();
-    
-    int cardWidth = 220;
-    int cardSpacing = 40;
-    int startY = 120;
-    int sidebarX = SCREEN_WIDTH - SIDEBAR_WIDTH - SIDEBAR_MARGIN;
-    int gameAreaWidth = sidebarX;
-    int totalCardsWidth = cardWidth * 3 + cardSpacing * 2;
-    int startX = (gameAreaWidth - totalCardsWidth) / 2;
-    
-    if (sondeoBeaten) return false;
-    
-    Rectangle skipRect = {startX + 20, startY + 360, cardWidth - 40, 55};
-    
-    if (CheckCollisionPointRec(mouse, skipRect) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-        return true;
-    }
-    
-    return false;
-}
 
-// ✅ Check Skip Cata button
-bool checkSkipCataPress()
+int checkOptionsButtonPress()
 {
-    Vector2 mouse = GetMousePosition();
+    Vector2 mouse;
+    int sidebarX, optionsWidth, optionsHeight, optionsX, optionsY;
+    Rectangle optionsRect;
     
-    int cardWidth = 220;
-    int cardSpacing = 40;
-    int startY = 120;
-    int sidebarX = SCREEN_WIDTH - SIDEBAR_WIDTH - SIDEBAR_MARGIN;
-    int gameAreaWidth = sidebarX;
-    int totalCardsWidth = cardWidth * 3 + cardSpacing * 2;
-    int startX = (gameAreaWidth - totalCardsWidth) / 2;
-    
-    int card2X = startX + cardWidth + cardSpacing;
-    
-    if (!sondeoBeaten || cataBeaten) return false;
-    
-    Rectangle skipRect = {card2X + 20, startY + 360, cardWidth - 40, 55};
-    
-    if (CheckCollisionPointRec(mouse, skipRect) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-        return true;
-    }
-    
-    return false;
-}
-
-bool checkOptionsButtonPress()
-{
-    Vector2 mouse = GetMousePosition();
-    int sidebarX = SCREEN_WIDTH - SIDEBAR_WIDTH - SIDEBAR_MARGIN;
-    int optionsWidth = 140;
-    int optionsHeight = 50;
-    int optionsX = sidebarX + 20 + (SIDEBAR_WIDTH - 40 - optionsWidth) / 2;
-    int optionsY = SCREEN_HEIGHT - 65;
-    Rectangle optionsRect = {optionsX, optionsY, optionsWidth, optionsHeight};
+    mouse = GetMousePosition();
+    sidebarX = SCREEN_WIDTH - SIDEBAR_WIDTH - SIDEBAR_MARGIN;
+    optionsWidth = 140;
+    optionsHeight = 50;
+    optionsX = sidebarX + 20 + (SIDEBAR_WIDTH - 40 - optionsWidth) / 2;
+    optionsY = SCREEN_HEIGHT - 65;
+    optionsRect = (Rectangle){optionsX, optionsY, optionsWidth, optionsHeight};
     
     if (CheckCollisionPointRec(mouse, optionsRect)) {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-            return true;
+            return 1;
         }
     }
-    return false;
+    return 0;
 }
 
-bool checkMenuButtonPress(int btnX, int btnY, int btnWidth, int btnHeight)
+int checkCataSelectPress()
 {
-    Vector2 mouse = GetMousePosition();
-    Rectangle menuRect = {(float)btnX, (float)btnY, (float)btnWidth, (float)btnHeight};
+    Vector2 mouse;
+    int cardWidth, cardSpacing, startY, sidebarX, gameAreaWidth, totalCardsWidth, startX;
+    int card2X, card3X;
+    Rectangle selectRect;
+    
+    mouse = GetMousePosition();
+    
+    cardWidth = 220;
+    cardSpacing = 40;
+    startY = 120;
+    sidebarX = SCREEN_WIDTH - SIDEBAR_WIDTH - SIDEBAR_MARGIN;
+    gameAreaWidth = sidebarX;
+    totalCardsWidth = cardWidth * 3 + cardSpacing * 2;
+    startX = (gameAreaWidth - totalCardsWidth) / 2;
+    
+    if (!sondeoBeaten) {
+        selectRect = (Rectangle){startX + 20, startY + 20, cardWidth - 40, 45};
+        if (CheckCollisionPointRec(mouse, selectRect) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+            return 1;
+        }
+    } else if (!cataBeaten) {
+        card2X = startX + cardWidth + cardSpacing;
+        selectRect = (Rectangle){card2X + 20, startY + 20, cardWidth - 40, 45};
+        if (CheckCollisionPointRec(mouse, selectRect) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+            return 1;
+        }
+    } else if (!calicataBeaten) {
+        card3X = startX + (cardWidth + cardSpacing) * 2;
+        selectRect = (Rectangle){card3X + 20, startY + 20, cardWidth - 40, 45};
+        if (CheckCollisionPointRec(mouse, selectRect) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+            return 1;
+        }
+    }
+    
+    return 0;
+}
+
+int checkSkipSondeoPress()
+{
+    Vector2 mouse;
+    int cardWidth, cardSpacing, startY, sidebarX, gameAreaWidth, totalCardsWidth, startX;
+    Rectangle skipRect;
+    
+    mouse = GetMousePosition();
+    
+    cardWidth = 220;
+    cardSpacing = 40;
+    startY = 120;
+    sidebarX = SCREEN_WIDTH - SIDEBAR_WIDTH - SIDEBAR_MARGIN;
+    gameAreaWidth = sidebarX;
+    totalCardsWidth = cardWidth * 3 + cardSpacing * 2;
+    startX = (gameAreaWidth - totalCardsWidth) / 2;
+    
+    if (sondeoBeaten) return 0;
+    
+    skipRect = (Rectangle){startX + 20, startY + 360, cardWidth - 40, 55};
+    
+    if (CheckCollisionPointRec(mouse, skipRect) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+        return 1;
+    }
+    
+    return 0;
+}
+
+int checkSkipCataPress()
+{
+    Vector2 mouse;
+    int cardWidth, cardSpacing, startY, sidebarX, gameAreaWidth, totalCardsWidth, startX, card2X;
+    Rectangle skipRect;
+    
+    mouse = GetMousePosition();
+    
+    cardWidth = 220;
+    cardSpacing = 40;
+    startY = 120;
+    sidebarX = SCREEN_WIDTH - SIDEBAR_WIDTH - SIDEBAR_MARGIN;
+    gameAreaWidth = sidebarX;
+    totalCardsWidth = cardWidth * 3 + cardSpacing * 2;
+    startX = (gameAreaWidth - totalCardsWidth) / 2;
+    
+    card2X = startX + cardWidth + cardSpacing;
+    
+    if (!sondeoBeaten || cataBeaten) return 0;
+    
+    skipRect = (Rectangle){card2X + 20, startY + 360, cardWidth - 40, 55};
+    
+    if (CheckCollisionPointRec(mouse, skipRect) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+        return 1;
+    }
+    
+    return 0;
+}
+
+int checkMenuButtonPress(int btnX, int btnY, int btnWidth, int btnHeight)
+{
+    Vector2 mouse;
+    Rectangle menuRect;
+    
+    mouse = GetMousePosition();
+    menuRect = (Rectangle){(float)btnX, (float)btnY, (float)btnWidth, (float)btnHeight};
     
     if (CheckCollisionPointRec(mouse, menuRect)) {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-            return true;
+            return 1;
         }
     }
-    return false;
+    return 0;
 }
 
-bool checkResumeButtonPress(int btnX, int btnY, int btnWidth, int btnHeight)
-{
-    Vector2 mouse = GetMousePosition();
-    Rectangle resumeRect = {(float)btnX, (float)btnY, (float)btnWidth, (float)btnHeight};
+int checkResumeButtonPress(int btnX, int btnY, int btnWidth, int btnHeight) {
+    Vector2 mouse;
+    Rectangle resumeRect;
+    
+    mouse = GetMousePosition();
+    resumeRect = (Rectangle){(float)btnX, (float)btnY, (float)btnWidth, (float)btnHeight};
     
     if (CheckCollisionPointRec(mouse, resumeRect)) {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-            return true;
+            return 1;
         }
-    }
-    return false;
-}
+    } return 0;
+
+} 
 
 void updateUI()
 {

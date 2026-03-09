@@ -1,17 +1,22 @@
 #ifndef SAVE_H
 #define SAVE_H
 
+
+
 typedef struct {
+    int bestCalicata;
+    int totalRuns;
+    int totalMoney;
+    int totalScore;
     int bestScore;
     int runsCompleted;
     int totalMinesFound;
     int totalTilesRevealed;
-    int bestCalicata;
-    int totalMoneyEarned;
 } SaveData;
 
-void loadSave();
-void saveGame();
 extern SaveData save;
+
+void loadGame();
+void saveGame();
 
 #endif

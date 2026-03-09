@@ -5,28 +5,28 @@
 #define GRID_W_CATITO 8
 #define GRID_H_CATITO 8
 #define MINES_CATITO 10
-#define SCORE_CATITO 1 // 100 puntos
+#define SCORE_CATITO 100 // 100 puntos
 #define PAR_TIME_CATITO 45  //  45 segundos
 
 // SONDEO (12×12)
 #define GRID_W_SONDEO 12
 #define GRID_H_SONDEO 12
 #define MINES_SONDEO 20
-#define SCORE_SONDEO 1 // 450 puntos
+#define SCORE_SONDEO 300 // 300 puntos
 #define PAR_TIME_SONDEO 90  //  90 segundos
 
 // CATA (16×16)
 #define GRID_W_CATA 16
 #define GRID_H_CATA 16
 #define MINES_CATA 35
-#define SCORE_CATA 1 // 700 puntos
+#define SCORE_CATA 550 // 550 puntos
 #define PAR_TIME_CATA 180  //  180 segundos
 
 // CALICATA (16×16)
 #define GRID_W_CALICATA 16
 #define GRID_H_CALICATA 16
 #define MINES_CALICATA 40
-#define SCORE_CALICATA 1 // 1000 puntos
+#define SCORE_CALICATA 660 // 1000 puntos
 #define PAR_TIME_CALICATA 300  //  300 segundos
 
 // Tamaño máximo
